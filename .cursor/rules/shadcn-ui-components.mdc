@@ -1,0 +1,111 @@
+---
+description: 
+globs: **/packages/ui/**/*.tsx,**/packages/ui/**/*.ts,**/components/**/*.tsx
+alwaysApply: false
+---
+# shadcn UI and Component Organization
+
+## Component Structure Overview
+
+1. **Atomic Design Structure**
+   - **Atoms**: Basic building blocks (buttons, inputs, icons)
+   - **Molecules**: Groups of atoms functioning together (form fields, search bars)
+   - **Organisms**: Complex UI components made of molecules and atoms (navigation menus, chess pieces)
+   - **Templates**: Page layouts without content
+   - **Pages**: Specific implementations of templates with content
+
+2. **Domain Organization**
+   - Organize higher-level components by domain:
+     ```
+     packages/ui/
+     ├── atoms/
+     ├── molecules/
+     ├── organisms/
+     │   ├── auth/
+     │   ├── chess/
+     │   ├── dashboard/
+     │   └── common/
+     ├── templates/
+     └── pages/
+     ```
+   - Keep cross-domain components in a `common` directory
+
+## shadcn Implementation
+
+1. **Component Customization**
+   - Place shadcn base components in `packages/ui/atoms`
+   - Extend rather than modify shadcn core components
+   - Create wrapper components with project-specific styling
+   - Document customizations clearly
+
+2. **Tailwind Integration**
+   - Use project design tokens in tailwind.config.js
+   - Create custom utility classes for repeated patterns
+   - Maintain consistent spacing and color systems
+   - Follow shadcn conventions for component styling
+
+3. **Component Variants**
+   - Use cva (class-variance-authority) for component variants
+   - Define variants in separate files for complex components
+   - Document available variants clearly
+   - Use consistent naming for variant props
+
+## Component Development Workflow
+
+1. **Component Creation**
+   - Start with shadcn components when available
+   - Follow existing patterns for custom components
+   - Create variants before creating new components
+   - Document component APIs with TypeScript interfaces
+
+2. **Composition Patterns**
+   - Prefer composition over inheritance
+   - Use React Context for component communication
+   - Implement compound components for complex UIs
+   - Keep components focused on a single responsibility
+
+3. **Testing Strategy**
+   - Test UI components with Storybook or similar
+   - Implement visual regression testing
+   - Test accessibility for all components
+   - Document testing approach for each component type
+
+## Best Practices
+
+1. **Accessibility**
+   - Ensure all components meet WCAG 2.1 AA standards
+   - Use appropriate ARIA attributes
+   - Test keyboard navigation
+   - Document accessibility features
+
+2. **Performance**
+   - Minimize component re-renders
+   - Lazy-load complex components
+   - Monitor component bundle sizes
+   - Document performance considerations
+
+3. **Documentation**
+   - Create consistent component README files
+   - Document props with TypeScript and JSDoc
+   - Include usage examples
+   - Document design decisions and trade-offs
+
+## Domain-Specific Guidelines
+
+1. **Auth Components**
+   - Implement consistent form validation
+   - Use shared authentication state
+   - Create reusable security patterns
+   - Document security considerations
+
+2. **Chess Components**
+   - Create atomic chess pieces as molecules
+   - Implement board components as organisms
+   - Separate UI from game logic
+   - Document chess notation and conventions
+
+3. **Shared Components**
+   - Create clear boundaries for shared components
+   - Document reuse patterns
+   - Implement versioning strategy
+   - Consider backward compatibility

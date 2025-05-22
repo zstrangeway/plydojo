@@ -1,0 +1,126 @@
+---
+description: This rule provides guidelines for managing pnpm workspaces in monorepo projects. Apply when working with package dependencies, workspace configuration, monorepo organization, or build processes across multiple packages. Reference when adding new packages, managing dependencies, configuring scripts, or updating the build system within the workspace structure.
+globs: 
+alwaysApply: false
+---
+# pnpm Workspace Guidelines
+
+## Workspace Structure
+
+1. **Monorepo Organization**
+   - Use workspace:* protocol for internal dependencies
+   - Define workspace packages in pnpm-workspace.yaml
+   - Organize packages by domain or technical boundary
+   - Keep workspace configuration minimal
+
+2. **Package Naming**
+   - Use scoped packages for internal packages (@project/package-name)
+   - Follow consistent naming conventions
+   - Group related packages with common prefixes
+   - Document package purpose in package.json
+
+3. **Directory Structure**
+   - Use a consistent structure across packages
+   - Separate source code, tests, and build artifacts
+   - Place configuration files at appropriate levels
+   - Consider standard layouts for common package types
+
+## Dependency Management
+
+1. **Versioning Strategy**
+   - Use exact versions for dependencies
+   - Leverage pnpm's ability to share dependencies
+   - Consider using changesets for version management
+   - Document dependency update process
+
+2. **Dependency Hoisting**
+   - Use shamefully-hoist only when absolutely necessary
+   - Document reasons for hoisting
+   - Monitor hoisting issues
+   - Test with strict dependency isolation
+
+3. **Peer Dependencies**
+   - Define peer dependencies appropriately
+   - Document required peer dependency versions
+   - Test with different peer dependency versions
+   - Consider using devDependencies for testing
+
+## Script Conventions
+
+1. **Common Scripts**
+   - Implement standard scripts across packages (build, test, lint)
+   - Use consistent script naming
+   - Document script purpose and parameters
+   - Consider environment-specific scripts
+
+2. **Script Execution**
+   - Use -r flag for recursive execution
+   - Leverage filtering for selective execution
+   - Document execution patterns
+   - Consider performance for large workspaces
+
+3. **Lifecycle Scripts**
+   - Implement proper lifecycle hooks
+   - Document dependencies between scripts
+   - Consider parallelization options
+   - Test script execution order
+
+## Package Configuration
+
+1. **package.json Organization**
+   - Keep package.json files consistent
+   - Document required fields
+   - Use same license, author, and repository fields
+   - Include appropriate keywords and metadata
+
+2. **Exports Configuration**
+   - Define clear package exports
+   - Consider multiple entry points
+   - Document public API surface
+   - Implement proper type definitions
+
+3. **Publication Configuration**
+   - Configure files to include/exclude
+   - Set appropriate access levels
+   - Consider using publishConfig
+   - Document publishing process
+
+## Build System
+
+1. **Build Configuration**
+   - Use consistent build tools across packages
+   - Share build configuration when possible
+   - Document build process
+   - Consider incremental builds
+
+2. **Output Structure**
+   - Use consistent output directories
+   - Consider ESM and CJS outputs
+   - Document output format
+   - Include source maps appropriately
+
+3. **Build Performance**
+   - Leverage pnpm's caching
+   - Implement incremental builds
+   - Consider parallel builds
+   - Document build time optimizations
+
+## Development Workflow
+
+1. **Local Development**
+   - Use link: protocol for local development
+   - Document workspace setup
+   - Consider development-only configurations
+   - Test local dependencies
+
+2. **Testing Strategy**
+   - Implement consistent testing across packages
+   - Consider monorepo-wide test runs
+   - Document test coverage requirements
+   - Leverage test caching
+
+3. **CI Integration**
+   - Configure CI for monorepo
+   - Implement caching strategies
+   - Consider incremental CI runs
+   - Document CI workflow 
