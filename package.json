@@ -1,5 +1,5 @@
 {
-  "name": "shadcn-ui-monorepo",
+  "name": "plydojo",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -9,8 +9,9 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "@workspace/eslint-config": "workspace:*",
-    "@workspace/typescript-config": "workspace:*",
+    "@plydojo/eslint-config": "workspace:*",
+    "@plydojo/typescript-config": "workspace:*",
+    "@plydojo/plydojo-ui": "workspace:*",
     "prettier": "^3.5.1",
     "turbo": "^2.4.2",
     "typescript": "5.7.3"

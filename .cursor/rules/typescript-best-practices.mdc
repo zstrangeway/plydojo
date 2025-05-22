@@ -1,0 +1,91 @@
+---
+description: 
+globs: **/*.ts,**/*.tsx
+alwaysApply: false
+---
+# TypeScript Best Practices
+
+## Type Definitions
+
+1. **Use Explicit Types**
+   - Declare parameter and return types for functions
+   - Avoid implicit `any` types
+   - Use type assertions sparingly and only when necessary
+
+2. **Interface vs Type**
+   - Use `interface` for object types that can be extended
+   - Use `type` for unions, intersections, and tuple types
+   - Be consistent with choice across similar concepts
+
+3. **Type Organization**
+   - Create domain-specific type files (e.g., `user-types.ts`)
+   - Export types from a central location when shared across modules
+   - Co-locate types with their implementation when specific to one module
+
+## Advanced TypeScript Features
+
+1. **Generics**
+   - Use generics for reusable components and utilities
+   - Add constraints to generics with `extends`
+   - Provide clear defaults with `= DefaultType`
+
+2. **Discriminated Unions**
+   - Use a common field (typically `type`) as a discriminator
+   - Leverage for state management and API responses
+   - Example: `type Result = { type: "success", data: T } | { type: "error", error: Error }`
+
+3. **Utility Types**
+   - Use built-in utility types (`Partial`, `Required`, `Pick`, etc.)
+   - Create custom utility types for project-specific transformations
+   - Document complex utility types with examples
+
+## TypeScript with React
+
+1. **Component Props**
+   - Define prop interfaces with descriptive names (e.g., `ButtonProps`)
+   - Use React's built-in types (`ReactNode`, `ComponentType`, etc.)
+   - For components with many props, group related props into separate interfaces
+
+2. **State Management**
+   - Type state objects explicitly
+   - For reducers, type actions with discriminated unions
+   - Use generics for reusable hooks
+
+3. **Event Handling**
+   - Use proper event types (e.g., `React.MouseEvent<HTMLButtonElement>`)
+   - Create type-safe event handlers with proper parameter types
+   - Use typed event emitters when appropriate
+
+## Code Organization
+
+1. **Import Structure**
+   - Group imports by source (e.g., standard library, external packages, internal modules)
+   - Use absolute imports for module references
+   - Avoid circular dependencies
+
+2. **Module Design**
+   - Export types and interfaces alongside their implementations
+   - Use barrel files (`index.ts`) to simplify imports
+   - Consider module boundaries when deciding where to place types
+
+3. **Comment Conventions**
+   - Use JSDoc comments for functions and interfaces
+   - Include examples for complex functions
+   - Document non-obvious type constraints
+
+## Error Handling
+
+1. **Type-Safe Error Handling**
+   - Use discriminated unions for different error types
+   - Avoid throwing non-Error objects
+   - Create custom error classes for domain-specific errors
+
+2. **Optional Chaining and Nullish Coalescing**
+   - Use `?.` for safely accessing properties that might be undefined
+   - Use `??` for providing fallbacks for `null` or `undefined`
+   - Avoid unnecessary type guards when these operators suffice
+
+3. **Assertions and Guards**
+   - Create reusable type guard functions for common checks
+   - Use meaningful assertion messages
+   - Consider using assertion libraries for complex validations 

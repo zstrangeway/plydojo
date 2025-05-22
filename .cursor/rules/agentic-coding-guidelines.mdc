@@ -1,0 +1,106 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Agentic Coding Guidelines
+
+## Code Structure
+
+1. **Discoverability**
+   - Use descriptive file and directory names
+   - Organize code using consistent patterns
+   - Group related functionality together
+   - Maintain a flat hierarchy where possible
+
+2. **File Organization**
+   - Keep files focused on a single responsibility
+   - Limit file size to facilitate comprehension
+   - Use consistent file structure within categories
+   - Adopt clear naming conventions
+
+3. **Component Boundaries**
+   - Define clear interfaces between components
+   - Document component responsibilities
+   - Minimize dependencies between components
+   - Use explicit imports rather than global access
+
+## Documentation
+
+1. **Code Comments**
+   - Comment on "why" not "what"
+   - Document non-obvious design decisions
+   - Explain complex algorithms or business rules
+   - Mark areas that need future improvement
+
+2. **API Documentation**
+   - Document function signatures with JSDoc
+   - Include parameter types and return values
+   - Describe side effects and assumptions
+   - Provide usage examples for complex functions
+
+3. **Architecture Documentation**
+   - Keep high-level architecture in `.memory/systemPatterns.md`
+   - Document component relationships
+   - Explain design patterns used
+   - Update documentation when architecture changes
+
+## Code Conventions
+
+1. **Naming**
+   - Use descriptive, searchable variable and function names
+   - Follow consistent naming conventions
+   - Avoid abbreviations unless universally understood
+   - Name boolean variables with prefixes like "is", "has", "should"
+
+2. **Function Design**
+   - Keep functions small and focused on a single task
+   - Use descriptive function names that indicate purpose
+   - Limit function parameters (prefer objects for multiple parameters)
+   - Document input/output types clearly
+
+3. **Error Handling**
+   - Use consistent error handling patterns
+   - Document expected error cases
+   - Make error messages descriptive and actionable
+   - Include context in error objects
+
+## Type Safety
+
+1. **Type Definitions**
+   - Use TypeScript interfaces for data structures
+   - Define types for API responses and requests
+   - Create domain-specific types that represent business concepts
+   - Export and reuse types consistently
+
+2. **Type Organization**
+   - Create dedicated type files for domain concepts
+   - Co-locate types with their primary implementation
+   - Include examples in type documentation
+   - Use descriptive type names
+
+3. **Type Usage**
+   - Leverage TypeScript's type system fully
+   - Avoid `any` types where possible
+   - Use generics for reusable components
+   - Define strict return types
+
+## Project Structure
+
+1. **Monorepo Organization**
+   - Organize packages by domain or technical boundary
+   - Maintain consistent structure across packages
+   - Document cross-package dependencies
+   - Use workspace tools effectively
+
+2. **Configuration**
+   - Centralize configuration where possible
+   - Document configuration options
+   - Use typed configuration objects
+   - Validate configuration at startup
+
+3. **Testing**
+   - Organize tests alongside implementation code
+   - Write descriptive test names
+   - Structure tests for readability
+   - Include test coverage for edge cases 

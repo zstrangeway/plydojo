@@ -1,0 +1,72 @@
+---
+description: This rule should be used with `claude-3.5-sonnet`
+globs: 
+alwaysApply: false
+---
+# Claude 3.5 Optimization Rules
+
+## Context Window Optimization
+
+1. **Concise Code Comments**
+   - Use brief, meaningful comments that explain "why" not "what"
+   - Avoid redundant comments that simply restate the code
+   - Use JSDoc for APIs but keep descriptions concise
+
+2. **File Structure Guidelines**
+   - Keep individual files under 1000 lines where possible
+   - Break large components into smaller, focused components
+   - Use consistent file organization patterns
+
+3. **Documentation References**
+   - Reference Memory Bank files instead of duplicating information
+   - Use relative links to reference other documentation
+   - Example: "See .memory/systemPatterns.md for architecture details"
+
+4. **Code Organization**
+   - Group related functionality within files using clear section headers
+   - Use meaningful variable/function names that reduce the need for comments
+   - Prefer composition over deeply nested hierarchies
+
+5. **Type Definitions**
+   - Maintain central type definitions in dedicated files
+   - Reference types rather than redefining them
+   - Use descriptive type names that convey purpose
+
+## When Communicating with Claude 3.5
+
+1. **Request Guidelines**
+   - Begin queries with specific context references
+   - Specify which Memory Bank files are relevant
+   - Keep individual requests focused on specific tasks
+
+2. **Response Preferences**
+   - Request concise responses when appropriate
+   - Ask for step-by-step instructions for complex operations
+   - Specify whether you want explanations or just solutions
+
+3. **File References**
+   - Use standardized file reference format: `path/to/file.ext:lineNumber`
+   - Group related file references together
+   - Prioritize most relevant files first
+
+4. **Knowledge Graph Integration**
+   - Reference relevant entities from the knowledge graph
+   - Use consistent entity naming that matches the graph
+   - Update the knowledge graph when implementing significant changes
+
+## Memory Management
+
+1. **Active Context Updates**
+   - Update .memory/activeContext.md at the beginning and end of sessions
+   - Keep session focus explicitly documented
+   - Record key decisions and next steps
+
+2. **Knowledge Retention**
+   - Use consistent terminology across documentation
+   - Create new Memory Bank sections for major new features
+   - Cross-reference related concepts
+
+3. **Token Optimization**
+   - Focus on semantic meaning over verbose descriptions
+   - Use lists and tables for structured information
+   - Omit boilerplate and repetitive content 

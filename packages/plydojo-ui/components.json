@@ -11,10 +11,10 @@
   },
   "iconLibrary": "lucide",
   "aliases": {
-    "components": "@workspace/ui/components",
-    "utils": "@workspace/ui/lib/utils",
-    "hooks": "@workspace/ui/hooks",
-    "lib": "@workspace/ui/lib",
-    "ui": "@workspace/ui/components"
+    "components": "@plydojo/plydojo-ui/components",
+    "utils": "@plydojo/plydojo-ui/lib/utils",
+    "hooks": "@plydojo/plydojo-ui/hooks",
+    "lib": "@plydojo/plydojo-ui/lib",
+    "ui": "@plydojo/plydojo-ui/components"
   }
 }

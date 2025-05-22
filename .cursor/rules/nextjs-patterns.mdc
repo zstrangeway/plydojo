@@ -1,0 +1,115 @@
+---
+description: 
+globs: **/app/**/*.tsx,**/components/**/*.tsx
+alwaysApply: false
+---
+# Next.js Patterns
+
+## Project Structure
+
+1. **App Router Organization**
+   - Use the app directory structure for new projects
+   - Organize routes logically with nested folders
+   - Keep page components simple, delegating logic to other components
+   - Use appropriate special files (`page.tsx`, `layout.tsx`, `loading.tsx`, etc.)
+
+2. **Component Organization**
+   - Create a clear separation between UI components and logic
+   - Use a consistent folder structure for components:
+     ```
+     components/
+     ├── ui/ (reusable UI components)
+     ├── features/ (feature-specific components)
+     ├── layouts/ (layout components)
+     └── providers/ (context providers)
+     ```
+   - Co-locate related components, hooks, and utilities
+
+3. **Data Fetching**
+   - Prefer server components for data fetching
+   - Use React Server Components for database queries and API calls
+   - Add the `'use client'` directive only when needed
+   - Create dedicated API utilities in a separate module
+
+## Server Components
+
+1. **Server vs Client Components**
+   - Default to server components
+   - Mark components with `'use client'` only when they need:
+     - Interactivity and event listeners
+     - State or lifecycle effects
+     - Browser-only APIs
+     - Custom hooks that use client-side features
+   - Keep client components as small and focused as possible
+
+2. **Streaming and Suspense**
+   - Use Suspense boundaries to stream UI components
+   - Implement loading states with the `loading.tsx` file
+   - Break down pages to enable progressive rendering
+   - Add error boundaries with `error.tsx`
+
+3. **Server Actions**
+   - Use Server Actions for form submissions and data mutations
+   - Validate inputs server-side for security
+   - Implement proper error handling and return typed results
+   - Revalidate cache as needed with `revalidatePath` or `revalidateTag`
+
+## Routing and Navigation
+
+1. **Route Definitions**
+   - Use dynamic segments for variable routes (`[id]`)
+   - Implement catch-all routes with `[...slug]` when needed
+   - Organize route groups with `(groupName)` for logical separation
+   - Keep route parameters minimal and descriptive
+
+2. **Navigation**
+   - Use `<Link>` component for client-side navigation
+   - Implement `useRouter` for programmatic navigation
+   - Prefetch important routes for performance
+   - Maintain a consistent navigation structure
+
+3. **Layouts**
+   - Create nested layouts for shared UI elements
+   - Use the root layout for global UI elements and providers
+   - Keep layouts lightweight to minimize rerenders
+   - Consider using loading boundaries at layout transitions
+
+## Data Management
+
+1. **Data Fetching**
+   - Use the `fetch` API with appropriate caching options
+   - Implement a centralized data fetching layer
+   - Add retry logic for unreliable APIs
+   - Use proper TypeScript typing for API responses
+
+2. **Caching Strategy**
+   - Define appropriate cache lifetime with `revalidate`
+   - Use tags for grouped invalidation
+   - Implement optimistic updates for better UX
+   - Consider SWR or React Query for client-side data fetching
+
+3. **State Management**
+   - Use React Context for global state where appropriate
+   - Keep most state local to components
+   - Consider external state libraries only when necessary
+   - Type all state objects explicitly
+
+## Performance Optimization
+
+1. **Image Optimization**
+   - Use the Next.js `<Image>` component for all images
+   - Specify appropriate `sizes` attributes for responsive images
+   - Use the `priority` prop for above-the-fold images
+   - Consider using blur placeholders for better UX
+
+2. **Font Optimization**
+   - Use the `next/font` module for web fonts
+   - Prefer system fonts where possible
+   - Minimize font variations for better performance
+   - Implement font-display strategies
+
+3. **Bundle Optimization**
+   - Use dynamic imports for code splitting
+   - Minimize client-side JavaScript
+   - Monitor bundle size with build analytics
+   - Leverage static site generation for stable content 
