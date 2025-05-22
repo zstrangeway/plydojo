@@ -1,5 +1,8 @@
 # Memory Bank Instructions
 
+## Last Updated
+2025-05-27
+
 ## Purpose
 The Memory Bank serves as a persistent, structured knowledge repository for the PlyDojo project. It helps maintain context across coding sessions and ensures consistent understanding of the project goals, architecture, and progress.
 
@@ -22,11 +25,12 @@ The Memory Bank consists of seven essential files:
 - Record all major decisions in systemPatterns.md
 - Track implementation progress in progress.md
 
-### Claude 3.5 Optimization
-- Keep individual files under 20KB to ensure they fit within Claude's context window
+### Claude 4.0 Optimization
+- Claude 4.0 can handle larger files effectively, so comprehensive documentation is preferred over artificial size limits
 - Use clear headings and structured formatting to aid parsing
-- Focus on high-value information that provides context rather than code duplication
-- Use links to reference specific code files rather than copying large code blocks
+- Focus on high-value information that provides complete context for development work
+- Include detailed specifications and examples when they add value
+- Prioritize completeness and accuracy over brevity when documenting complex systems
 
 ### Referencing the Memory Bank
 - Reference specific Memory Bank files when asking questions to provide context
