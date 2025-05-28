@@ -1,0 +1,95 @@
+name: Staging Deployment
+
+on:
+  push:
+    branches: [main]
+
+env:
+  AWS_REGION: us-east-1
+
+jobs:
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    environment: staging
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build packages
+        run: pnpm build
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Deploy to staging
+        run: |
+          cd apps/plydojo-infra
+          pnpm sst deploy --stage staging
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY_STAGING }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET_STAGING }}
+          STRIPE_API_KEY: ${{ secrets.STRIPE_API_KEY_STAGING }}
+
+      - name: Get staging URL
+        id: get-url
+        run: |
+          cd apps/plydojo-infra
+          STAGING_URL=$(pnpm sst env get --stage staging API_URL || echo "https://staging-api.plydojo.com")
+          echo "staging_url=$STAGING_URL" >> $GITHUB_OUTPUT
+
+      - name: Wait for deployment
+        run: sleep 30
+
+      - name: Health check
+        run: |
+          curl -f ${{ steps.get-url.outputs.staging_url }}/health || exit 1
+
+      - name: Run E2E tests
+        run: |
+          cd apps/plydojo-web
+          pnpm test:e2e --base-url=${{ steps.get-url.outputs.staging_url }}
+        env:
+          STAGING_URL: ${{ steps.get-url.outputs.staging_url }}
+        continue-on-error: false
+
+      - name: Notify on failure
+        if: failure()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: failure
+          text: "Staging deployment failed! Check the logs."
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  trigger-production:
+    name: Trigger Production Deployment
+    needs: deploy-staging
+    runs-on: ubuntu-latest
+    if: success()
+
+    steps:
+      - name: Trigger production workflow
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          event-type: deploy-production
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'

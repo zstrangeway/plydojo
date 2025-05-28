@@ -6,9 +6,15 @@
     "build": "turbo build",
     "dev": "cd apps/plydojo-infra && pnpm dev",
     "lint": "turbo lint",
+    "type-check": "turbo type-check",
+    "test": "turbo test",
+    "test:e2e": "turbo test:e2e",
+    "test:smoke": "turbo test:smoke",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "unlock": "cd apps/plydojo-infra && pnpm unlock",
-    "deploy": "cd apps/plydojo-infra && pnpm deploy"
+    "deploy": "cd apps/plydojo-infra && pnpm deploy",
+    "deploy:staging": "cd apps/plydojo-infra && pnpm sst deploy --stage staging",
+    "deploy:production": "cd apps/plydojo-infra && pnpm sst deploy --stage production"
   },
   "devDependencies": {
     "@plydojo/eslint-config": "workspace:*",
