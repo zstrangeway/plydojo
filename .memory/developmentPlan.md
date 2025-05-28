@@ -8,14 +8,13 @@ This document outlines the development roadmap for PlyDojo, prioritized by featu
 
 ## 1. Project Setup and Infrastructure
 
-### 1.1 Frontend Setup
-- [ ] Initialize Next.js application in `apps/plydojo-web`
-- [ ] Configure Tailwind CSS and shadcn/ui per screensList.md development notes
-- [ ] Set up pnpm workspace structure
-- [ ] Create UI component library in `packages/plydojo-ui`
-- [ ] Configure ESLint and Prettier
-- [ ] Set up React Context API for state management
-- [ ] Create common layout components (header, navigation, etc.)
+### 1.1 Frontend Setup ✅ COMPLETED
+- [x] Initialize Next.js application in `apps/plydojo-web`
+- [x] Configure Tailwind CSS and shadcn/ui per screensList.md development notes
+- [x] Set up pnpm workspace structure
+- [x] Create UI component library in `packages/plydojo-ui`
+- [x] Configure ESLint and Prettier
+- [x] Create common layout components (header, navigation, etc.)
 
 ### 1.2 Backend Infrastructure
 - [ ] Configure SST for serverless deployment in `apps/plydojo-infra`
@@ -274,6 +273,6 @@ Attributes: type, content, read, createdAt
 - Performance testing for chess engine and AI operations
 
 ## Current Status
-- Current focus: Project Setup and Infrastructure
-- Completed features: 0/150+
-- Last updated: 2025-05-24 
+- Current focus: Priority 1.2 Backend Infrastructure
+- Completed features: Priority 1.1 Frontend Setup (1/150+)
+- Last updated: 2025-05-27 

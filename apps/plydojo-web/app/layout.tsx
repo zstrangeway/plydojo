@@ -1,29 +1,53 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import { ThemeProvider } from "next-themes";
+import { Header } from "@plydojo/plydojo-ui/components/header";
+import Link from "next/link";
 
 import "@plydojo/plydojo-ui/globals.css";
-import { Providers } from "@/components/providers";
 
-const fontSans = Geist({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
+const inter = Inter({ subsets: ["latin"] });
 
-const fontMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-});
+export const metadata: Metadata = {
+  title: "PlyDojo - Interactive Chess Tutoring",
+  description: "Learn chess with AI-powered tutoring and interactive gameplay",
+};
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
+  const navigationItems = [
+    { href: "/", label: "Dashboard" },
+    { href: "/profile", label: "Profile" },
+    { href: "/history", label: "History" },
+    { href: "/settings", label: "Settings" },
+  ];
+
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased `}
-      >
-        <Providers>{children}</Providers>
+      <body className={inter.className}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <div className="min-h-screen flex flex-col">
+            <Header
+              logoComponent={
+                <Link href="/" className="text-xl font-semibold">
+                  PlyDojo
+                </Link>
+              }
+              navigationItems={navigationItems}
+              onLoginClick={() => console.log("Login clicked")}
+              onSignUpClick={() => console.log("Sign up clicked")}
+            />
+            <main className="flex-1">{children}</main>
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );
