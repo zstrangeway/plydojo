@@ -61,6 +61,10 @@ export default $config({
       // Storage
       bucketName: assetsBucket.name,
 
+      // Payment Processing
+      stripeSecretKey: process.env.STRIPE_SECRET_KEY,
+      stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+
       // Monitoring (conditional)
       ...(monitoring && {
         alertsTopicArn: monitoring.alertsTopic.arn,
