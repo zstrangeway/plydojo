@@ -17,9 +17,18 @@ declare module "sst" {
       "name": string
       "type": "sst.aws.Dynamo"
     }
+    "EmailService": {
+      "configSet": string
+      "sender": string
+      "type": "sst.aws.Email"
+    }
     "GamesTable": {
       "name": string
       "type": "sst.aws.Dynamo"
+    }
+    "IdentityPool": {
+      "id": string
+      "type": "sst.aws.CognitoIdentityPool"
     }
     "NotificationsTable": {
       "name": string
@@ -29,9 +38,22 @@ declare module "sst" {
       "name": string
       "type": "sst.aws.Dynamo"
     }
+    "UserPool": {
+      "id": string
+      "type": "sst.aws.CognitoUserPool"
+    }
     "UsersTable": {
       "name": string
       "type": "sst.aws.Dynamo"
+    }
+    "WebClient": {
+      "id": string
+      "secret": string
+      "type": "sst.aws.CognitoUserPoolClient"
+    }
+    "WebSite": {
+      "type": "sst.aws.StaticSite"
+      "url": string
     }
   }
 }

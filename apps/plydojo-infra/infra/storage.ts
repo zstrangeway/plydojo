@@ -12,6 +12,11 @@ export const usersTable = new sst.aws.Dynamo("UsersTable", {
     sk: "string",
   },
   primaryIndex: { hashKey: "pk", rangeKey: "sk" },
+  transform: {
+    table: {
+      name: `plydojo-${$app.stage}-users`,
+    },
+  },
 });
 
 // Games Table with GSI for user queries
@@ -29,6 +34,11 @@ export const gamesTable = new sst.aws.Dynamo("GamesTable", {
       rangeKey: "gameId",
     },
   },
+  transform: {
+    table: {
+      name: `plydojo-${$app.stage}-games`,
+    },
+  },
 });
 
 // Chat Table
@@ -38,6 +48,11 @@ export const chatTable = new sst.aws.Dynamo("ChatTable", {
     sk: "string",
   },
   primaryIndex: { hashKey: "pk", rangeKey: "sk" },
+  transform: {
+    table: {
+      name: `plydojo-${$app.stage}-chat`,
+    },
+  },
 });
 
 // Settings Table
@@ -47,6 +62,11 @@ export const settingsTable = new sst.aws.Dynamo("SettingsTable", {
     sk: "string",
   },
   primaryIndex: { hashKey: "pk", rangeKey: "sk" },
+  transform: {
+    table: {
+      name: `plydojo-${$app.stage}-settings`,
+    },
+  },
 });
 
 // Notifications Table
@@ -56,4 +76,9 @@ export const notificationsTable = new sst.aws.Dynamo("NotificationsTable", {
     sk: "string",
   },
   primaryIndex: { hashKey: "pk", rangeKey: "sk" },
+  transform: {
+    table: {
+      name: `plydojo-${$app.stage}-notifications`,
+    },
+  },
 }); 

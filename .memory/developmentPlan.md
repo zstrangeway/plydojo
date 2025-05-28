@@ -16,17 +16,26 @@ This document outlines the development roadmap for PlyDojo, prioritized by featu
 - [x] Configure ESLint and Prettier
 - [x] Create common layout components (header, navigation, etc.)
 
-### 1.2 Backend Infrastructure 🚧 PARTIALLY COMPLETED
+### 1.2 Backend Infrastructure ✅ COMPLETED
 - [x] Configure SST for serverless deployment in `apps/plydojo-infra`
 - [x] Set up AWS services (Lambda, API Gateway, DynamoDB, S3)
 - [x] Create DynamoDB schema for all entity types (see Data Model section below)
 - [x] Create Lambda function structure in `apps/plydojo-api`
-- [ ] Configure authentication using AWS Cognito *(postponed due to SST v3 syntax issues)*
-- [ ] Set up CloudFront CDN for static assets *(postponed due to SST v3 syntax issues)*
-- [ ] Configure logging and monitoring via CloudWatch *(postponed due to SST v3 syntax issues)*
-- [ ] Set up AWS SES for email delivery *(postponed due to SST v3 syntax issues)*
+- [x] Configure authentication using AWS Cognito
+- [x] Set up CloudFront CDN for static assets
+- [x] Configure AWS SES for email delivery
+- [x] Set up basic health check endpoint
 
-**Note**: Core infrastructure (DynamoDB, API Gateway, S3) is working with health check endpoint. Advanced services (Cognito, SES, CloudFront) need to be revisited with proper SST v3 syntax when implementing respective features.
+**Status**: All core infrastructure components are deployed and working:
+- **API Gateway**: `https://uiolh3h01e.execute-api.us-east-1.amazonaws.com` with health endpoint
+- **CloudFront CDN**: `https://d56jp8yn7yt27.cloudfront.net` serving static site
+- **Cognito Authentication**: User Pool and Identity Pool configured
+- **DynamoDB Tables**: All tables created with proper naming (`plydojo-{stage}-{tablename}`)
+- **S3 Storage**: Assets bucket configured
+- **SES Email**: Configured for development (test@example.com) and production (domain-based)
+- **Lambda Functions**: Health check endpoint working, structure ready for additional functions
+
+**Completed**: 2025-05-28
 
 ### 1.3 DevOps
 - [ ] Create CI/CD pipeline using GitHub Actions

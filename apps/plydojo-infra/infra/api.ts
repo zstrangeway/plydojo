@@ -1,36 +1,19 @@
 // API Gateway and Lambda Functions
-import { usersTable, gamesTable, chatTable, settingsTable, notificationsTable } from "./storage.js";
 
-export const api = new sst.aws.ApiGatewayV2("Api", {
-  cors: {
-    allowCredentials: true,
-    allowHeaders: ["content-type", "authorization"],
-    allowMethods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowOrigins: ["http://localhost:3000"],
-  },
-});
+export function createApi(tables: any[]) {
+  const api = new sst.aws.ApiGatewayV2("Api", {
+    cors: {
+      allowCredentials: true,
+      allowHeaders: ["content-type", "authorization"],
+      allowMethods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+      allowOrigins: ["http://localhost:3000"],
+    },
+  });
 
-// Simple health check endpoint to start
-api.route("GET /health", {
-  handler: () => {
-    return {
-      statusCode: 200,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        status: "healthy",
-        timestamp: new Date().toISOString(),
-        tables: {
-          users: usersTable.name,
-          games: gamesTable.name,
-          chat: chatTable.name,
-          settings: settingsTable.name,
-          notifications: notificationsTable.name,
-        },
-      }),
-    };
-  },
-});
+  // Health check endpoint using actual Lambda function
+  api.route("GET /health", "../plydojo-api/src/health.handler");
 
-// TODO: Add Lambda function routes later when functions are properly configured 
+  // TODO: Add more Lambda function routes later
+  
+  return api;
+} 
