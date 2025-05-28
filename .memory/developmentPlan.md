@@ -16,15 +16,17 @@ This document outlines the development roadmap for PlyDojo, prioritized by featu
 - [x] Configure ESLint and Prettier
 - [x] Create common layout components (header, navigation, etc.)
 
-### 1.2 Backend Infrastructure
-- [ ] Configure SST for serverless deployment in `apps/plydojo-infra`
-- [ ] Set up AWS services (Lambda, API Gateway, DynamoDB, S3)
-- [ ] Create DynamoDB schema for all entity types (see Data Model section below)
-- [ ] Create Lambda function structure in `apps/plydojo-api`
-- [ ] Configure authentication using AWS Cognito
-- [ ] Set up CloudFront CDN for static assets
-- [ ] Configure logging and monitoring via CloudWatch
-- [ ] Set up AWS SES for email delivery
+### 1.2 Backend Infrastructure 🚧 PARTIALLY COMPLETED
+- [x] Configure SST for serverless deployment in `apps/plydojo-infra`
+- [x] Set up AWS services (Lambda, API Gateway, DynamoDB, S3)
+- [x] Create DynamoDB schema for all entity types (see Data Model section below)
+- [x] Create Lambda function structure in `apps/plydojo-api`
+- [ ] Configure authentication using AWS Cognito *(postponed due to SST v3 syntax issues)*
+- [ ] Set up CloudFront CDN for static assets *(postponed due to SST v3 syntax issues)*
+- [ ] Configure logging and monitoring via CloudWatch *(postponed due to SST v3 syntax issues)*
+- [ ] Set up AWS SES for email delivery *(postponed due to SST v3 syntax issues)*
+
+**Note**: Core infrastructure (DynamoDB, API Gateway, S3) is working with health check endpoint. Advanced services (Cognito, SES, CloudFront) need to be revisited with proper SST v3 syntax when implementing respective features.
 
 ### 1.3 DevOps
 - [ ] Create CI/CD pipeline using GitHub Actions
@@ -273,6 +275,6 @@ Attributes: type, content, read, createdAt
 - Performance testing for chess engine and AI operations
 
 ## Current Status
-- Current focus: Priority 1.2 Backend Infrastructure
-- Completed features: Priority 1.1 Frontend Setup (1/150+)
+- Current focus: Priority 1.3 DevOps
+- Completed features: Priority 1.1 Frontend Setup, Priority 1.2 Backend Infrastructure (2/150+)
 - Last updated: 2025-05-27 

@@ -1,0 +1,26 @@
+{
+  "name": "@plydojo/plydojo-api",
+  "version": "0.0.1",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.709.0",
+    "@aws-sdk/lib-dynamodb": "^3.709.0",
+    "@aws-sdk/client-cognito-identity-provider": "^3.709.0",
+    "@aws-sdk/client-ses": "^3.709.0",
+    "jsonwebtoken": "^9.0.2",
+    "bcryptjs": "^2.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/aws-lambda": "^8.10.145",
+    "@plydojo/typescript-config": "workspace:*",
+    "typescript": "^5.7.3"
+  }
+} 

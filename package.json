@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
-    "dev": "turbo dev",
+    "dev": "cd apps/plydojo-infra && pnpm dev",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "unlock": "cd apps/plydojo-infra && pnpm unlock",
+    "deploy": "cd apps/plydojo-infra && pnpm deploy"
   },
   "devDependencies": {
     "@plydojo/eslint-config": "workspace:*",
