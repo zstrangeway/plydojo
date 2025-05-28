@@ -42,12 +42,16 @@ export function Header({
 
         {/* User Actions */}
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={onLoginClick}>
-            Login
-          </Button>
-          <Button size="sm" onClick={onSignUpClick}>
-            Sign Up
-          </Button>
+          {onLoginClick && (
+            <Button variant="outline" size="sm" onClick={onLoginClick}>
+              Login
+            </Button>
+          )}
+          {onSignUpClick && (
+            <Button size="sm" onClick={onSignUpClick}>
+              Sign Up
+            </Button>
+          )}
         </div>
       </div>
     </header>

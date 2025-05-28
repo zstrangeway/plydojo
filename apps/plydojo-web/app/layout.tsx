@@ -1,16 +1,16 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { ThemeProvider } from "next-themes";
-import { Header } from "@plydojo/plydojo-ui/components/header";
-import Link from "next/link";
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import { ThemeProvider } from 'next-themes';
+import { Header } from '@plydojo/plydojo-ui/components/header';
+import Link from 'next/link';
 
-import "@plydojo/plydojo-ui/globals.css";
+import '@plydojo/plydojo-ui/globals.css';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: "PlyDojo - Interactive Chess Tutoring",
-  description: "Learn chess with AI-powered tutoring and interactive gameplay",
+  title: 'PlyDojo - Interactive Chess Tutoring',
+  description: 'Learn chess with AI-powered tutoring and interactive gameplay',
 };
 
 export default function RootLayout({
@@ -19,10 +19,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const navigationItems = [
-    { href: "/", label: "Dashboard" },
-    { href: "/profile", label: "Profile" },
-    { href: "/history", label: "History" },
-    { href: "/settings", label: "Settings" },
+    { href: '/', label: 'Dashboard' },
+    { href: '/profile', label: 'Profile' },
+    { href: '/history', label: 'History' },
+    { href: '/settings', label: 'Settings' },
   ];
 
   return (
@@ -42,8 +42,6 @@ export default function RootLayout({
                 </Link>
               }
               navigationItems={navigationItems}
-              onLoginClick={() => console.log("Login clicked")}
-              onSignUpClick={() => console.log("Sign up clicked")}
             />
             <main className="flex-1">{children}</main>
           </div>
