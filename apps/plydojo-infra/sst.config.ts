@@ -14,6 +14,7 @@ export default $config({
     const { createApi } = await import("./infra/api.js");
     const { createAuth } = await import("./infra/auth.js");
     const { createWebServices } = await import("./infra/web.js");
+    const { createMonitoring } = await import("./infra/monitoring.js");
 
     // Import storage tables for API linking
     const { 
@@ -40,6 +41,9 @@ export default $config({
     // Create web services (CDN, Email, etc.)
     const web = createWebServices(assetsBucket.name);
 
+    // Create monitoring and alerting (only for staging and production)
+    const monitoring = $app.stage !== "dev" ? createMonitoring(api, $app.stage) : null;
+
     // Export important values for frontend/Lambda access
     return {
       // API
@@ -56,6 +60,16 @@ export default $config({
       
       // Storage
       bucketName: assetsBucket.name,
+
+      // Payment Processing
+      stripeSecretKey: process.env.STRIPE_SECRET_KEY,
+      stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+
+      // Monitoring (conditional)
+      ...(monitoring && {
+        alertsTopicArn: monitoring.alertsTopic.arn,
+        dashboardUrl: `https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#dashboards:name=plydojo-${$app.stage}-monitoring`,
+      }),
     };
   },
 }); 

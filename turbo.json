@@ -10,11 +10,25 @@
     "lint": {
       "dependsOn": ["^lint"]
     },
-    "check-types": {
-      "dependsOn": ["^check-types"]
+    "type-check": {
+      "dependsOn": ["^type-check"]
     },
     "typecheck": {
       "dependsOn": ["^typecheck"]
+    },
+    "test": {
+      "dependsOn": ["^test"],
+      "inputs": ["$TURBO_DEFAULT$", "**/*.test.{ts,tsx,js,jsx}"]
+    },
+    "test:e2e": {
+      "dependsOn": ["build"],
+      "cache": false,
+      "inputs": ["$TURBO_DEFAULT$", "**/*.e2e.{ts,tsx,js,jsx}"]
+    },
+    "test:smoke": {
+      "dependsOn": ["build"],
+      "cache": false,
+      "inputs": ["$TURBO_DEFAULT$", "**/*.smoke.{ts,tsx,js,jsx}"]
     },
     "dev": {
       "cache": false,

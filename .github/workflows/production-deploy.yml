@@ -1,0 +1,171 @@
+name: Production Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      force_deploy:
+        description: "Force deployment without staging validation"
+        required: false
+        default: false
+        type: boolean
+
+env:
+  AWS_REGION: us-east-1
+
+jobs:
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Verify deployment safety
+        run: |
+          echo "Deploying to production from branch: ${{ github.ref }}"
+          echo "Commit SHA: ${{ github.sha }}"
+
+          # Ensure we're deploying from main branch (unless force_deploy is true)
+          if [[ "${{ github.ref }}" != "refs/heads/main" ]] && [[ "${{ inputs.force_deploy }}" != "true" ]]; then
+            echo "❌ Production deployments must be from main branch"
+            echo "Current ref: ${{ github.ref }}"
+            echo "Use force_deploy=true to override this check"
+            exit 1
+          fi
+
+          echo "✅ Safety checks passed"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build packages
+        run: pnpm build
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Store current deployment info
+        id: backup
+        run: |
+          cd apps/plydojo-infra
+          # Get current stack info for rollback
+          CURRENT_STACK=$(aws cloudformation describe-stacks --stack-name plydojo-production --query 'Stacks[0].StackId' --output text 2>/dev/null || echo "none")
+          echo "current_stack=$CURRENT_STACK" >> $GITHUB_OUTPUT
+          echo "deployment_time=$(date -u +%Y%m%d-%H%M%S)" >> $GITHUB_OUTPUT
+
+      - name: Deploy to production
+        id: deploy
+        run: |
+          cd apps/plydojo-infra
+          pnpm sst deploy --stage production
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY_PRODUCTION }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET_PRODUCTION }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY_PRODUCTION }}
+          STRIPE_PUBLISHABLE_KEY: ${{ secrets.STRIPE_PUBLISHABLE_KEY_PRODUCTION }}
+
+      - name: Get production URL
+        id: get-url
+        run: |
+          cd apps/plydojo-infra
+
+          # SST v3 writes outputs to .sst/outputs.json after deployment
+          if [ -f ".sst/outputs.json" ]; then
+            API_URL=$(cat .sst/outputs.json | jq -r '.apiUrl // empty')
+            if [ -n "$API_URL" ] && [ "$API_URL" != "null" ]; then
+              echo "Found API URL in outputs: $API_URL"
+              echo "production_url=$API_URL" >> $GITHUB_OUTPUT
+            else
+              echo "API URL not found in outputs.json"
+              exit 1
+            fi
+          else
+            echo ".sst/outputs.json not found - deployment may have failed"
+            exit 1
+          fi
+
+      - name: Wait for deployment
+        run: sleep 60
+
+      - name: Production health check
+        id: health-check
+        run: |
+          echo "Running health checks..."
+
+          # Basic health check
+          curl -f ${{ steps.get-url.outputs.production_url }}/health || exit 1
+
+          # Additional smoke tests
+          echo "Health check passed"
+        continue-on-error: false
+
+      # TODO: Add comprehensive E2E tests once we have them implemented
+      # - name: Run production smoke tests
+      #   run: |
+      #     cd apps/plydojo-web
+      #     pnpm test:e2e:smoke --baseUrl=${{ steps.get-url.outputs.production_url }}
+      #   env:
+      #     PRODUCTION_API_URL: ${{ steps.get-url.outputs.production_url }}
+      #     # Add any production-specific test environment variables
+      #
+      # - name: Run critical user journey tests
+      #   run: |
+      #     cd apps/plydojo-web
+      #     pnpm test:e2e:critical --baseUrl=${{ steps.get-url.outputs.production_url }}
+      #   env:
+      #     PRODUCTION_API_URL: ${{ steps.get-url.outputs.production_url }}
+
+      - name: Notify success
+        if: success()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: success
+          text: "Production deployment successful! 🚀"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: Automatic rollback on failure
+        if: failure()
+        run: |
+          echo "Deployment or tests failed, initiating automatic rollback..."
+          cd apps/plydojo-infra
+
+          # Use CloudFormation rollback if previous stack exists
+          if [ "${{ steps.backup.outputs.current_stack }}" != "none" ]; then
+            echo "Rolling back to previous deployment..."
+            aws cloudformation cancel-update-stack --stack-name plydojo-production || true
+            aws cloudformation continue-update-rollback --stack-name plydojo-production || true
+            
+            echo "Waiting for rollback to complete..."
+            sleep 120
+            
+            # Verify the service is responding after rollback
+            PRODUCTION_URL="https://api.plydojo.com"
+            curl -f $PRODUCTION_URL/health || echo "Service may still be recovering"
+          else
+            echo "No previous deployment found, cannot rollback"
+          fi
+
+      - name: Notify rollback
+        if: failure()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: failure
+          text: "Production deployment failed and automatic rollback initiated! 🔄"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

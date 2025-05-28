@@ -1,31 +1,66 @@
-# shadcn/ui monorepo template
+# PlyDojo
 
-This template is for creating a monorepo with shadcn/ui.
+Interactive chess tutoring platform that combines chess engines with AI tutoring.
 
-## Usage
+## CI/CD Pipeline Status
+✅ CI/CD pipeline configured and ready for testing
+
+## Development
+
+This project uses a monorepo structure with pnpm workspaces.
+
+### Quick Start
 
 ```bash
-pnpm dlx shadcn@latest init
+# Install dependencies
+pnpm install
+
+# Start development
+pnpm dev
 ```
 
-## Adding components
+### Project Structure
 
-To add components to your app, run the following command at the root of your `web` app:
+- `apps/plydojo-web` - Next.js frontend application
+- `apps/plydojo-api` - Lambda functions for backend API
+- `apps/plydojo-infra` - SST infrastructure as code
+- `packages/plydojo-ui` - Shared UI components
+- `packages/plydojo-types` - Shared TypeScript types
+
+### Development Commands
 
 ```bash
-pnpm dlx shadcn@latest add button -c apps/web
+# Build all packages
+pnpm build
+
+# Run tests
+pnpm test
+
+# Type checking
+pnpm type-check
+
+# Linting
+pnpm lint
 ```
 
-This will place the ui components in the `packages/ui/src/components` directory.
+## Architecture
 
-## Tailwind
+PlyDojo uses a serverless architecture on AWS:
 
-Your `tailwind.config.ts` and `globals.css` are already set up to use the components from the `ui` package.
+- **Frontend**: Next.js deployed via CloudFront CDN
+- **Backend**: Lambda functions with API Gateway
+- **Database**: DynamoDB for scalable data storage
+- **Authentication**: AWS Cognito
+- **AI Integration**: OpenAI API for chess tutoring
 
-## Using components
+## Contributing
 
-To use the components in your app, import them from the `ui` package.
+1. Create a feature branch
+2. Make your changes
+3. Run tests and linting
+4. Submit a pull request
 
-```tsx
-import { Button } from "@workspace/ui/components/button"
-```
+The CI/CD pipeline will automatically:
+- Run tests and linting on PRs
+- Deploy to staging on merge to main
+- Deploy to production after staging validation

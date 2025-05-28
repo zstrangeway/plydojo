@@ -1,7 +1,7 @@
 # System Patterns
 
 ## Last Updated
-2025-05-27
+2025-05-28
 
 ## Architecture Overview
 PlyDojo follows a serverless architecture using SST (Serverless Stack) with a modern React frontend.
@@ -223,4 +223,81 @@ packages/plydojo-ui/src/
 
 ### Email Service
 - AWS SES for all email functionality (verification, password reset, notifications)
-- Template-based emails with proper security and deliverability 
+- Template-based emails with proper security and deliverability
+
+## Development Workflow Patterns
+
+### Commit Message Conventions
+Following [Conventional Commits](https://www.conventionalcommits.org/) standard for consistent, semantic commit messages with task ID references.
+
+**Format:**
+```
+<type>(task-id): <description>
+<type>(scope/task-id): <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+**Task ID Format:**
+- Use development plan task IDs in scope: `(1.1)`, `(2.1)`, `(2.1.1)`, etc.
+- Combine with domain scope: `(auth/2.1)`, `(chess/3.2)`, `(ui/1.1)`
+- Use `(setup)` for initial project setup work
+- Use `(fix)` for bug fixes not tied to specific tasks
+- Use `(docs)` for documentation-only changes
+
+**Types:**
+- `feat:` - New features
+- `fix:` - Bug fixes
+- `docs:` - Documentation only changes
+- `style:` - Code style changes (formatting, semicolons, etc.)
+- `refactor:` - Code changes that neither fix bugs nor add features
+- `perf:` - Performance improvements
+- `test:` - Adding or updating tests
+- `build:` - Changes to build system or dependencies
+- `ci:` - Changes to CI configuration files and scripts
+- `chore:` - Other changes that don't modify src or test files
+
+**Scope Options:**
+- Task ID only: `(2.1)`, `(1.3)`, `(3.2.1)`
+- Domain + Task ID: `(auth/2.1)`, `(chess/3.2)`, `(infra/1.2)`
+- Domain only: `(auth)`, `(chess)`, `(ui)` (when task ID unclear)
+- Special scopes: `(setup)`, `(fix)`, `(docs)`
+
+**Examples:**
+```
+feat(2.1): add login functionality
+feat(ui/3.1): create dashboard layout
+feat(1.2): implement SST deployment
+fix(chess/3.2): resolve move validation bug
+feat(2.1.1): setup E2E test infrastructure
+docs(api): update endpoint documentation
+style(fix): format component files
+refactor(chat/3.4): simplify message handling
+perf(chess/3.2): optimize Stockfish integration
+test(2.1.1): add login flow E2E tests
+build(1.1): update Next.js to v15
+ci(1.3): add staging deployment workflow
+chore(setup): update dependencies
+```
+
+**Breaking Changes:**
+Use `!` after type/scope to indicate breaking changes:
+```
+feat!: remove deprecated API endpoints
+feat(auth)!: change authentication flow
+```
+
+**Squashing Strategy:**
+- Squash fix commits into their related feature commits
+- Keep feature commits separate for clear development history
+- Maintain clean main branch with logical commit boundaries
+- Each commit should represent a complete, working feature or fix
+
+**Commit Body Guidelines:**
+- Use imperative mood ("add feature" not "added feature")
+- Explain what and why, not how
+- Reference issues/PRs when relevant
+- Keep first line under 72 characters
+- Separate body with blank line if used 

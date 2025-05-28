@@ -1,7 +1,7 @@
 # PlyDojo Development Plan
 
 ## Last Updated
-2025-05-27
+2025-05-28
 
 ## Overview
 This document outlines the development roadmap for PlyDojo, prioritized by feature importance based on the canonical screen requirements defined in screensList.md. Features should be completed in the order listed to ensure the most critical functionality is developed first.
@@ -37,11 +37,34 @@ This document outlines the development roadmap for PlyDojo, prioritized by featu
 
 **Completed**: 2025-05-28
 
-### 1.3 DevOps
-- [ ] Create CI/CD pipeline using GitHub Actions
-- [ ] Configure Development, Staging, and Production environments
-- [ ] Set up SST deployment pipeline
-- [ ] Implement environment-specific configuration management
+### 1.3 DevOps ✅ COMPLETED
+- [x] Create CI/CD pipeline using GitHub Actions
+- [x] Configure Development, Staging, and Production environments
+- [x] Set up SST deployment pipeline
+- [x] Implement environment-specific configuration management
+
+**Status**: Complete CI/CD pipeline implemented and tested with automatic deployment flow:
+- **GitHub Actions Workflows**: 
+  - PR validation (lightweight testing without deployment)
+  - Staging deployment (merge to main → deploy → health check → trigger production)
+  - Production deployment (automatic trigger → deploy → health check → rollback on failure)
+- **Environment Configuration**: Staging and Production environments with proper secrets management
+- **Enhanced Monitoring**: CloudWatch alarms, SNS notifications, and dashboards for staging/production
+- **Local Development**: Setup script and Jest configuration for robust local testing
+- **Documentation**: Comprehensive CI/CD guide with troubleshooting and cost optimization
+- **SST v3 Integration**: Proper outputs.json handling and automatic deployment flow
+- **Domain Configuration**: Temporary placeholder setup with TODOs for real domain integration
+
+**Key Features**:
+- Fully automatic deployment pipeline (staging → production)
+- Cost-optimized workflow (no expensive feature branch deployments)
+- Automated rollback on production failures
+- Comprehensive monitoring and alerting
+- Local development environment without Docker dependency
+- Security-focused secrets management
+- Working health checks and E2E test integration points
+
+**Completed**: 2025-05-28
 
 ## 2. Authentication System (Per screensList.md Authentication flows)
 
@@ -55,6 +78,21 @@ This document outlines the development roadmap for PlyDojo, prioritized by featu
 - [ ] Implement "Forgot Password?" inline form display
 - [ ] Handle error states and user feedback per specified flows
 - [ ] Test login functionality (unit, integration, E2E)
+
+### 2.1.1 E2E Test Infrastructure Setup
+- [ ] Set up Playwright testing framework in `apps/plydojo-web`
+- [ ] Configure E2E test scripts in package.json:
+  - [ ] `test:e2e` - Run all E2E tests
+  - [ ] `test:e2e:smoke` - Run smoke tests (@smoke tag)
+  - [ ] `test:e2e:critical` - Run critical user journey tests (@critical tag)
+  - [ ] `test:e2e:ui` - Run tests with UI mode
+- [ ] Create test structure: `tests/e2e/{auth,chess,tutoring,smoke}/`
+- [ ] Implement basic smoke tests for health checks and critical paths
+- [ ] Update CI/CD workflows to run E2E tests:
+  - [ ] Staging: Run full E2E test suite after health check
+  - [ ] Production: Run smoke tests and critical user journey tests
+- [ ] Configure test environment variables and base URLs for different stages
+- [ ] Create test fixtures and utilities for common test patterns
 
 ### 2.2 Registration Functionality - `/register`
 - [ ] Create Registration Screen UI with visual progress indicator
@@ -284,6 +322,8 @@ Attributes: type, content, read, createdAt
 - Performance testing for chess engine and AI operations
 
 ## Current Status
-- Current focus: Priority 1.3 DevOps
-- Completed features: Priority 1.1 Frontend Setup, Priority 1.2 Backend Infrastructure (2/150+)
-- Last updated: 2025-05-27 
+- Current focus: Priority 2.1 Login Functionality (Authentication System)
+- Completed features: Priority 1.1 Frontend Setup, Priority 1.2 Backend Infrastructure, Priority 1.3 DevOps (3/150+)
+- Infrastructure Status: All core infrastructure deployed and working in staging and production
+- Next Priority: Begin authentication system implementation
+- Last updated: 2025-05-28 

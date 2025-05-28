@@ -1,0 +1,126 @@
+name: Staging Deployment
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  actions: write
+
+env:
+  AWS_REGION: us-east-1
+
+jobs:
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    environment: staging
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build packages
+        run: pnpm build
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Deploy to staging
+        run: |
+          cd apps/plydojo-infra
+          pnpm sst deploy --stage staging
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY_STAGING }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET_STAGING }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY_STAGING }}
+          STRIPE_PUBLISHABLE_KEY: ${{ secrets.STRIPE_PUBLISHABLE_KEY_STAGING }}
+
+      - name: Get staging URL
+        id: get-url
+        run: |
+          cd apps/plydojo-infra
+
+          # SST v3 writes outputs to .sst/outputs.json after deployment
+          if [ -f ".sst/outputs.json" ]; then
+            API_URL=$(cat .sst/outputs.json | jq -r '.apiUrl // empty')
+            if [ -n "$API_URL" ] && [ "$API_URL" != "null" ]; then
+              echo "Found API URL in outputs: $API_URL"
+              echo "staging_url=$API_URL" >> $GITHUB_OUTPUT
+            else
+              echo "API URL not found in outputs.json"
+              exit 1
+            fi
+          else
+            echo ".sst/outputs.json not found - deployment may have failed"
+            exit 1
+          fi
+
+      - name: Wait for deployment
+        run: sleep 30
+
+      - name: Health check
+        run: |
+          curl -f ${{ steps.get-url.outputs.staging_url }}/health || exit 1
+
+      # TODO: Add E2E tests once we have them implemented
+      # - name: Run E2E tests against staging
+      #   run: |
+      #     cd apps/plydojo-web
+      #     pnpm test:e2e --baseUrl=${{ steps.get-url.outputs.staging_url }}
+      #   env:
+      #     STAGING_API_URL: ${{ steps.get-url.outputs.staging_url }}
+
+      - name: Notify success
+        if: success()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: success
+          text: "Staging deployment successful! 🚀 Triggering production deployment..."
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: Trigger production deployment
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Wait 2 minutes to ensure staging is stable
+            console.log('Waiting 2 minutes before triggering production deployment...');
+            await new Promise(resolve => setTimeout(resolve, 120000));
+
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'production-deploy.yml',
+              ref: 'main'
+            });
+
+            console.log('Production deployment triggered!');
+
+      - name: Notify on failure
+        if: failure()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: failure
+          text: "Staging deployment failed! Check the logs."
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
