@@ -29,6 +29,9 @@ export default $config({
     // Create authentication services
     const auth = createAuth();
 
+    // Create web services (CDN, Email, etc.)
+    const web = createWebServices(assetsBucket.name);
+
     // Create API with all table access
     const api = createApi([
       usersTable,
@@ -36,10 +39,7 @@ export default $config({
       chatTable,
       settingsTable,
       notificationsTable,
-    ]);
-
-    // Create web services (CDN, Email, etc.)
-    const web = createWebServices(assetsBucket.name);
+    ], web.staticSite, auth.userPool, auth.userPoolClient);
 
     // Create monitoring and alerting (only for staging and production)
     const monitoring = $app.stage !== "dev" ? createMonitoring(api, $app.stage) : null;

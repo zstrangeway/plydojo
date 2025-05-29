@@ -5,22 +5,23 @@
   "private": true,
   "scripts": {
     "build": "tsc",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "create-cognito-test-user": "tsx scripts/create-cognito-test-user.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-cognito-identity-provider": "^3.709.0",
     "@aws-sdk/client-dynamodb": "^3.709.0",
     "@aws-sdk/lib-dynamodb": "^3.709.0",
-    "@aws-sdk/client-cognito-identity-provider": "^3.709.0",
-    "@aws-sdk/client-ses": "^3.709.0",
-    "jsonwebtoken": "^9.0.2",
-    "bcryptjs": "^2.4.3"
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
-    "@types/node": "^20",
-    "@types/jsonwebtoken": "^9.0.7",
-    "@types/bcryptjs": "^2.4.6",
-    "@types/aws-lambda": "^8.10.145",
     "@plydojo/typescript-config": "workspace:*",
+    "@types/aws-lambda": "^8.10.145",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/node": "^20",
+    "tsx": "^4.19.4",
     "typescript": "^5.7.3"
   }
-} 
+}

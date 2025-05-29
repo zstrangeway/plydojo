@@ -17,6 +17,10 @@ declare module "sst" {
       "name": string
       "type": "sst.aws.Dynamo"
     }
+    "CriticalAlerts": {
+      "arn": string
+      "type": "sst.aws.SnsTopic"
+    }
     "EmailService": {
       "configSet": string
       "sender": string
@@ -45,11 +49,6 @@ declare module "sst" {
     "UsersTable": {
       "name": string
       "type": "sst.aws.Dynamo"
-    }
-    "WebClient": {
-      "id": string
-      "secret": string
-      "type": "sst.aws.CognitoUserPoolClient"
     }
     "WebSite": {
       "type": "sst.aws.StaticSite"

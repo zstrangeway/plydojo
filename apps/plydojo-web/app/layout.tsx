@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
 import { Header } from '@plydojo/plydojo-ui/components/header';
+import { AuthProvider } from '../contexts/auth-context';
 import Link from 'next/link';
 
 import '@plydojo/plydojo-ui/globals.css';
@@ -34,17 +35,19 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="min-h-screen flex flex-col">
-            <Header
-              logoComponent={
-                <Link href="/" className="text-xl font-semibold">
-                  PlyDojo
-                </Link>
-              }
-              navigationItems={navigationItems}
-            />
-            <main className="flex-1">{children}</main>
-          </div>
+          <AuthProvider>
+            <div className="min-h-screen flex flex-col">
+              <Header
+                logoComponent={
+                  <Link href="/" className="text-xl font-semibold">
+                    PlyDojo
+                  </Link>
+                }
+                navigationItems={navigationItems}
+              />
+              <main className="flex-1">{children}</main>
+            </div>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

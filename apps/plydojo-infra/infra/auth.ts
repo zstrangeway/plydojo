@@ -10,8 +10,16 @@ export function createAuth() {
     },
   });
 
-  // Add a client for the web app
-  const userPoolClient = userPool.addClient("WebClient");
+  // Create User Pool Client using raw AWS resource for explicit control
+  const userPoolClient = new aws.cognito.UserPoolClient("UserPoolClient", {
+    userPoolId: userPool.id,
+    explicitAuthFlows: [
+      "ALLOW_USER_PASSWORD_AUTH",
+      "ALLOW_REFRESH_TOKEN_AUTH"
+    ],
+    generateSecret: false, // Public client for web apps
+    preventUserExistenceErrors: "ENABLED",
+  });
 
   // Create Cognito Identity Pool for AWS resource access
   const identityPool = new sst.aws.CognitoIdentityPool("IdentityPool", {
